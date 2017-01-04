@@ -62,19 +62,17 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+X = [ones(m, 1) X];
+a1 = sigmoid(X * Theta1');
+a1 = [ones(size(a1, 1), 1) a1];
+h = sigmoid(a1 * Theta2');
+
+Y = zeros(m, num_labels);
 for i = 1:m
-  X_i = X(i, :);
-  X_i = [1 X_i];
-
-  y_i = zeros(num_labels, 1);
-  y_i(y(i)) = 1;
-
-  a1 = sigmoid(X_i * Theta1');
-  a1 = [1 a1];
-  h = sigmoid(a1 * Theta2');
-
-  J += (-log(h) * y_i  - log(1 - h) * (1 - y_i)) / m;
+  Y(i, y(i)) = 1;
 end
+
+J = sum((-Y .* log(h)  - (1 - Y) .* log(1 - h))(:)) / m;
 
 % Adding regularization to cost
 J += (lambda * (sum((Theta1(:, 2:end) .^ 2)(:)) + sum((Theta2(:, 2:end) .^ 2)(:)))) / (2 * m);
