@@ -74,6 +74,10 @@ for i = 1:m
   h = sigmoid(a1 * Theta2');
 
   J += (-log(h) * y_i  - log(1 - h) * (1 - y_i)) / m;
+end
+
+% Adding regularization to cost
+J += (lambda * (sum((Theta1(:, 2:end) .^ 2)(:)) + sum((Theta2(:, 2:end) .^ 2)(:)))) / (2 * m);
 
 % -------------------------------------------------------------
 
