@@ -63,7 +63,8 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 X = [ones(m, 1) X];
-a1 = sigmoid(X * Theta1');
+z1 = X * Theta1';
+a1 = sigmoid(z1);
 a1 = [ones(size(a1, 1), 1) a1];
 h = sigmoid(a1 * Theta2');
 
@@ -77,7 +78,15 @@ J = sum((-Y .* log(h)  - (1 - Y) .* log(1 - h))(:)) / m;
 % Adding regularization to cost
 J += (lambda * (sum((Theta1(:, 2:end) .^ 2)(:)) + sum((Theta2(:, 2:end) .^ 2)(:)))) / (2 * m);
 
-% -------------------------------------------------------------
+% Calculations for Theta gradients
+delta_3 = h - Y;
+delta_2 = delta_3 * Theta2 .* sigmoidGradient([ones(size(z1, 1), 1) z1]);
+
+DELTA_1 = delta_2(:, 2:end)' * X;
+DELTA_2 = delta_3' * a1;
+
+Theta1_grad = DELTA_1 / m + lambda * [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)] / m;
+Theta2_grad = DELTA_2 / m + lambda * [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)] / m;
 
 % =========================================================================
 
