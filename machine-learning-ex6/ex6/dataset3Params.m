@@ -39,7 +39,7 @@ for i = 1:length(C_vec)
     if current_err < err
       C = current_C;
       sigma = current_sigma;
-      err = current_err
+      err = current_err;
     end
   end
 end
